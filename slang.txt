@@ -1,6 +1,6 @@
 Slang`Definition
 #1`Number one
-$` money|Dollar
+$`Dollar| money
 $_$`Has money
 %)`Drunk| giddy
 &`And
