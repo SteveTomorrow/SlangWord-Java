@@ -82,6 +82,9 @@ public class SlangWord {
             printWriter.write(stringBuilder.toString());
             printWriter.close();
 
+
+            // Update the map with the latest data
+            readFile(file);
         } catch (Exception e) {
             // TODO: handle exception
             System.out.println(e);
@@ -125,6 +128,7 @@ public class SlangWord {
         scanner.close();
     }
 
+
     public String[][] getData() {
         String s[][] = new String[sizeMap][3];
         Set<String> slagListSet = map.keySet();
@@ -163,14 +167,28 @@ public class SlangWord {
         return s;
     }
 
-    public void set(String slag, String oldValue, String newValue) {
+    public void set(String oldSlang, String newSlang, String oldValue, String newValue) {
         System.out.println(oldValue + "\t" + newValue);
-        List<String> definition = map.get(slag);
+        List<String> definition = map.get(oldSlang);
         int index = definition.indexOf(oldValue);
         definition.set(index, newValue);
+
+        // Cập nhật từ tiếng lóng
+        List<String> slangList = new ArrayList<>(map.remove(oldSlang));
+        slangList.set(index, newSlang);
+        map.put(newSlang, slangList);
+
+        // Cập nhật định nghĩa
+        List<String> definitionList = new ArrayList<>(definition);
+        map.put(newSlang, definitionList);
+
         this.saveFile(FILE_SLANGWORD);
         System.out.println("Size of map: " + sizeMap);
     }
+
+
+
+
     public void setslang(String slag, String oldValue, String newValue) {
         System.out.println(oldValue + "\t" + newValue);
         List<String> slang = map.get(slag);

@@ -230,6 +230,11 @@ public class EditSWFrame extends JFrame implements ActionListener, TableModelLis
             }
         }
     }
+    private void resetScreen() {
+        textField.setText(""); // Xóa nội dung trường nhập liệu
+        clearTable(); // Xóa bảng hiển thị
+        addRow(); // Hiển thị dữ liệu mới
+    }
 
     @Override
     public void tableChanged(TableModelEvent e) {
@@ -242,11 +247,19 @@ public class EditSWFrame extends JFrame implements ActionListener, TableModelLis
         String data = (String) tableShow.getValueAt(row, col);
         System.out.println("Table element selected is: " + row + col + " : " + data);
 
-        if (col == 2) {
-            // edit definition
-            slangWord.set((String) tableShow.getValueAt(row, 1), result[row][2], (String) tableShow.getValueAt(row, 2));
+        if (col == 1 || col == 2) {
+            String oldSlang = result[row][1];  // Lấy giá trị Slang cũ từ biến result
+            String newSlang = (String) tableShow.getValueAt(row, 1); // Lấy giá trị Slang mới từ bảng
+            String oldValue = result[row][2];  // Lấy giá trị Definition cũ từ biến result
+            String newValue = (String) tableShow.getValueAt(row, 2); // Lấy giá trị Definition mới từ bảng
+            result[row][1] = newSlang;
+            result[row][2] = newValue;
+
+            slangWord.set(oldSlang, newSlang, oldValue, newValue);
             JOptionPane.showMessageDialog(this, "Updated a row.");
+
         }
+
 
         tableShow.setFocusable(false);
     }

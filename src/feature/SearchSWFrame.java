@@ -208,9 +208,15 @@ public class SearchSWFrame extends JFrame implements ActionListener, TableModelL
             return;
         String Data = (String) tableshow.getValueAt(row, col);
         System.out.println("Table element selected is: " + row + col + " : " + Data);
-        if (col == 2) {
-            // edit definition
-            slangword.set((String) tableshow.getValueAt(row, 1), result[row][2], (String) tableshow.getValueAt(row, 2));
+        if (col == 1 || col == 2) {
+            String oldSlang = result[row][1];  // Lấy giá trị Slang cũ từ biến result
+            String newSlang = (String) tableshow.getValueAt(row, 1); // Lấy giá trị Slang mới từ bảng
+            String oldValue = result[row][2];  // Lấy giá trị Definition cũ từ biến result
+            String newValue = (String) tableshow.getValueAt(row, 2); // Lấy giá trị Definition mới từ bảng
+            result[row][1] = newSlang;
+            result[row][2] = newValue;
+
+            slangword.set(oldSlang, newSlang, oldValue, newValue);
             JOptionPane.showMessageDialog(this, "Updated a row.");
         }
         tableshow.setFocusable(false);
