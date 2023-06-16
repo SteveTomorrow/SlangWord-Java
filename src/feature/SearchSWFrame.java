@@ -87,6 +87,9 @@ public class SearchSWFrame extends JFrame implements ActionListener, TableModelL
         tableshow.getColumnModel().getColumn(0).setCellRenderer(centerRenderer);
         tableshow.getColumnModel().getColumn(1).setCellRenderer(centerRenderer);
         tableshow.getColumnModel().getColumn(2).setCellRenderer(centerRenderer);
+        tableshow.getColumnModel().getColumn(0).setMaxWidth(50); // Adjust the width of the "STT" column
+        tableshow.getColumnModel().getColumn(1).setPreferredWidth(200); // Adjust the width of the "Slang Word" column
+        tableshow.getColumnModel().getColumn(2).setPreferredWidth(500); // Adjust the width of the "Definition" column
         tableshow.getModel().addTableModelListener(this);
 //        ListSelectionModel selectionModel = tableshow.getSelectionModel();
 //

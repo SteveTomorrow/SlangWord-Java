@@ -4,25 +4,30 @@ import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.FlowLayout;
 
-import javax.swing.BorderFactory;
-import javax.swing.Box;
-import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.SwingConstants;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableModel;
 
-import shows.MenuSWFrame;
 import read.SlangWord;
+import shows.MenuSWFrame;
+
 public class RandomSWFrame extends JFrame implements ActionListener {
     JButton btnBack, btnReset;
     SlangWord slangWord = SlangWord.getInstance();
-    JLabel slangLabel, definitionLabel;
+    JTable slangTable;
+    DefaultTableModel tableModel;
 
     public RandomSWFrame() {
         // Get Content
@@ -31,76 +36,74 @@ public class RandomSWFrame extends JFrame implements ActionListener {
         // Title
         JPanel titlePanel = new JPanel();
         JLabel titleLabel = new JLabel("Random Slang Words");
-        titleLabel.setFont(new Font("Gill Sans MT", Font.PLAIN, 35));
+        titleLabel.setFont(new Font("Gill Sans MT", Font.BOLD, 35));
         titlePanel.add(titleLabel);
-        titlePanel.setBackground(Color.blue);
-        titleLabel.setForeground(Color.white);
-        titlePanel.setMaximumSize(new Dimension(700, 300));
+        titlePanel.setBackground(new Color(0, 153, 255));
+        titleLabel.setForeground(Color.WHITE);
+        titlePanel.setMaximumSize(new Dimension(700, 100));
 
-        // Slang word
-        String s[] = slangWord.random();
-        JPanel slangPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        JPanel definitionPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        JPanel slangDefinitionPanel = new JPanel();
-        JLabel slangHeaderLabel = new JLabel("Slang:");
-        slangLabel = new JLabel(s[0]);
-        JLabel definitionHeaderLabel = new JLabel("Definition:");
-        definitionLabel = new JLabel(s[1]);
-        slangLabel.setForeground(Color.GREEN);
-        definitionLabel.setForeground(Color.RED);
-        slangHeaderLabel.setFont(new Font("Gill Sans MT", Font.PLAIN, 35));
-        slangLabel.setFont(new Font("Gill Sans MT", Font.PLAIN, 35));
-        definitionHeaderLabel.setFont(new Font("Gill Sans MT", Font.PLAIN, 35));
-        definitionLabel.setFont(new Font("Gill Sans MT", Font.PLAIN, 35));
-        slangPanel.add(slangHeaderLabel);
-        slangPanel.add(slangLabel);
-        definitionPanel.add(definitionHeaderLabel);
-        definitionPanel.add(definitionLabel);
+        // Slang word table
+        String[] columns = { "Slang", "Definition" };
+        String[][] data = { slangWord.random() };
+        tableModel = new DefaultTableModel(data, columns);
+        slangTable = new JTable(tableModel);
+        slangTable.setFont(new Font("Gill Sans MT", Font.PLAIN, 14));
+        slangTable.setRowHeight(30);
+        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+        centerRenderer.setHorizontalAlignment(SwingConstants.CENTER);
+        slangTable.getColumnModel().getColumn(0).setCellRenderer(centerRenderer);
+        slangTable.getColumnModel().getColumn(1).setCellRenderer(centerRenderer);
+        slangTable.getColumnModel().getColumn(0).setPreferredWidth(200); // Adjust the width of the "Slang Word" column
+        slangTable.getColumnModel().getColumn(1).setPreferredWidth(500);
 
-        // Bottom btnback btnRenew
+        // Bottom btnBack btnReset
         btnReset = new JButton("Reset");
         btnBack = new JButton("Back");
         btnBack.addActionListener(this);
         btnReset.addActionListener(this);
-        JPanel buttonPane = new JPanel();
-        slangDefinitionPanel.setLayout(new BoxLayout(slangDefinitionPanel, BoxLayout.Y_AXIS));
-        slangDefinitionPanel.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
-        slangDefinitionPanel.add(slangPanel);
-        slangDefinitionPanel.add(definitionPanel);
-        buttonPane.add(Box.createHorizontalGlue());
-        buttonPane.add(btnReset);
-        buttonPane.add(Box.createRigidArea(new Dimension(10, 0)));
-        buttonPane.add(btnBack);
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.add(btnReset);
+        buttonPanel.add(btnBack);
 
         // Setting con
-        con.setLayout(new BoxLayout(con, BoxLayout.Y_AXIS));
-        con.add(Box.createRigidArea(new Dimension(0, 10)));
-        con.add(titlePanel);
-        con.add(Box.createRigidArea(new Dimension(0, 10)));
-        con.add(slangPanel);
-        con.add(Box.createRigidArea(new Dimension(0, 10)));
-        con.add(definitionPanel);
-        con.add(Box.createRigidArea(new Dimension(0, 10)));
-        con.add(buttonPane);
+        con.setLayout(new GridBagLayout());
+        GridBagConstraints c = new GridBagConstraints();
+        c.insets = new Insets(10, 0, 10, 0);
+
+        c.gridx = 0;
+        c.gridy = 0;
+        con.add(titlePanel, c);
+
+        c.gridx = 0;
+        c.gridy = 1;
+        con.add(slangTable.getTableHeader(), c);
+
+        c.gridx = 0;
+        c.gridy = 2;
+        con.add(slangTable, c);
+
+        c.gridx = 0;
+        c.gridy = 3;
+        con.add(buttonPanel, c);
+
         // Setting JFrame
-        this.setTitle("Random Slang Words");
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setVisible(true);
-        this.setSize(800, 300);
+        setTitle("Random Slang Words");
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setVisible(true);
+        pack();
+        setSize(800, 300);
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-        this.setLocation(dim.width / 2 - this.getSize().width / 2, dim.height / 2 - this.getSize().height / 2);
+        setLocation(dim.width / 2 - getSize().width / 2, dim.height / 2 - getSize().height / 2);
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == btnBack) {
-            this.dispose();
+            dispose();
             new MenuSWFrame();
         } else if (e.getSource() == btnReset) {
-            String s[] = slangWord.random();
-            slangLabel.setText(s[0]);
-            definitionLabel.setText(s[1]);
+            tableModel.setRowCount(0);
+            tableModel.addRow(slangWord.random());
         }
     }
-
 }

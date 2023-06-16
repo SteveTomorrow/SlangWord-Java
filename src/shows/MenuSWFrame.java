@@ -1,8 +1,7 @@
 package shows;
 
 import feature.*;
-import quesstion.QuestionSWFrame;
-import quesstion.QuizSWFrame;
+import question.QuestionSWFrame;
 import read.SlangWord;
 
 import javax.swing.*;
