@@ -1,5 +1,5 @@
 Slang`Definition
-#1`1
+#1`Number one
 $`Dollar| money
 $_$`Has money
 %)`Drunk| giddy

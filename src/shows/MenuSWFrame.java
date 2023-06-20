@@ -19,8 +19,9 @@ public class MenuSWFrame extends JFrame implements ActionListener {
             resetMenuItem, findDefinitionMenuItem, findSlangWordMenuItem;
 
     JTable slangWordTable;
+    JLabel resultLabel;
     DefaultTableModel model;
-
+    private String[] column = {"STT", "Slang Word", "Definition"};
     public MenuSWFrame() {
         // Label
         JLabel titleLabel = new JLabel("Slang Words");
@@ -88,16 +89,19 @@ public class MenuSWFrame extends JFrame implements ActionListener {
         menuBar.add(Box.createHorizontalGlue());
         menuBar.add(exitMenu);
 
-        JLabel resultLabel = new JLabel();
+        Container container = getContentPane();
+
+        resultLabel = new JLabel();
         resultLabel.setForeground(Color.BLACK);
         resultLabel.setFont(new Font("Gill Sans MT", Font.PLAIN, 18));
         resultLabel.setAlignmentX(CENTER_ALIGNMENT);
+        container.add(resultLabel);
+
 
         JPanel centerPanel = new JPanel();
         centerPanel.setBackground(Color.GREEN);
         String[][] data = slangWord.getData();
         String[][] dataCopy = slangWord.getData();
-        String[] column = {"STT", "Slang Word", "Definition"};
         resultLabel.setText("Total: " + data.length + " slang words");
         model = new DefaultTableModel(data, column);
         slangWordTable = new JTable(model);
@@ -127,7 +131,6 @@ public class MenuSWFrame extends JFrame implements ActionListener {
         centerPanel.setPreferredSize(panelSize);
         centerPanel.setMinimumSize(panelSize);
 
-        Container container = getContentPane();
         container.setLayout(new BoxLayout(container, BoxLayout.Y_AXIS));
         container.add(Box.createRigidArea(new Dimension(0, 10)));
         container.add(titleLabel);
@@ -154,6 +157,34 @@ public class MenuSWFrame extends JFrame implements ActionListener {
         menuItem.setFocusable(false);
         menuItem.setForeground(Color.RED);
         return menuItem;
+    }
+    private void resetAndLoadData() {
+        int choice = JOptionPane.showConfirmDialog(this, "Do you really want to reset Slang Word?", "An Inane Question",
+                JOptionPane.YES_NO_OPTION);
+        if (choice == JOptionPane.YES_OPTION) {
+            // Reset dữ liệu
+            slangWord.reset();
+            // Load lại dữ liệu
+            String[][] newData = slangWord.getData();
+            model.setDataVector(newData, column);
+            // Cập nhật thông tin số lượng slang words
+            resultLabel.setText("Total: " + newData.length + " slang words");
+
+            // Thiết lập lại kích thước hiển thị của bảng
+            slangWordTable.setRowHeight(30);
+            DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+            centerRenderer.setHorizontalAlignment(JLabel.CENTER);
+            slangWordTable.getColumnModel().getColumn(0).setCellRenderer(centerRenderer);
+            slangWordTable.getColumnModel().getColumn(1).setCellRenderer(centerRenderer);
+            slangWordTable.getColumnModel().getColumn(2).setCellRenderer(centerRenderer);
+            slangWordTable.putClientProperty("terminateEditOnFocusLost", true);
+
+            // Set column widths
+            slangWordTable.getColumnModel().getColumn(0).setMaxWidth(50); // Adjust the width of the "STT" column
+            slangWordTable.getColumnModel().getColumn(1).setPreferredWidth(200); // Adjust the width of the "Slang Word" column
+            slangWordTable.getColumnModel().getColumn(2).setPreferredWidth(500); // Adjust the width of the "Definition" column
+
+        }
     }
 
     @Override
@@ -190,12 +221,7 @@ public class MenuSWFrame extends JFrame implements ActionListener {
                 e1.printStackTrace();
             }
         } else if (e.getSource() == resetMenuItem) {
-            int choice = JOptionPane.showConfirmDialog(this, "Do you really want to reset Slang Word?", "An Inane Question",
-                    JOptionPane.YES_NO_OPTION);
-            if (choice == 0) {
-                slangWord.reset();
-                JOptionPane.showMessageDialog(this, "Reset success.");
-            }
+            resetAndLoadData();
         } else if (e.getSource() == findDefinitionMenuItem) {
             dispose();
             new QuestionSWFrame(1);
