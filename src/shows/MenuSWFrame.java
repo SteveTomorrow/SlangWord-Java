@@ -2,7 +2,7 @@ package shows;
 
 import feature.*;
 import question.QuestionSWFrame;
-import read.SlangWord;
+import handle.SlangWord;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -12,11 +12,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class MenuSWFrame extends JFrame implements ActionListener {
-    JButton exitButton;
+    JMenuItem exitMenuItem;
     SlangWord slangWord;
-    JMenu menu, submenu;
-    JMenuItem addMenuItem, editMenuItem, deleteMenuItem, historyMenuItem, randomMenuItem, searchMenuItem, resetMenuItem,
-            findDefinitionMenuItem, findSlangWordMenuItem;
+    JMenu menu, extraMenu, gameMenu, exitMenu;
+    JMenuItem addMenuItem, editMenuItem, deleteMenuItem, historyMenuItem, randomMenuItem, searchMenuItem,
+            resetMenuItem, findDefinitionMenuItem, findSlangWordMenuItem;
 
     JTable slangWordTable;
     DefaultTableModel model;
@@ -30,47 +30,63 @@ public class MenuSWFrame extends JFrame implements ActionListener {
 
         JMenuBar menuBar = new JMenuBar();
 
+        // JMenu 1: Menu
         menu = new JMenu("Menu");
         menu.setFont(new Font("Gill Sans MT", Font.PLAIN, 24));
         menu.setFocusable(false);
         menu.setForeground(Color.BLACK);
 
-        submenu = new JMenu("Quiz Game");
-        submenu.setFont(new Font("Gill Sans MT", Font.PLAIN, 24));
-        submenu.setFocusable(false);
-        submenu.setForeground(Color.RED);
-        submenu.setBackground(Color.GREEN);
-
-        addMenuItem = createMenuItem("Add", 24);
-        editMenuItem = createMenuItem("Edit", 24);
-        deleteMenuItem = createMenuItem("Delete", 24);
-        historyMenuItem = createMenuItem("History", 24);
-        randomMenuItem = createMenuItem("Random", 24);
-        searchMenuItem = createMenuItem("Search", 24);
-        resetMenuItem = createMenuItem("Reset", 24);
-        findDefinitionMenuItem = createMenuItem("1. Find Definition", 18);
-        findSlangWordMenuItem = createMenuItem("2. Find SlangWord", 18);
+        addMenuItem = createMenuItem("Add", 18);
+        editMenuItem = createMenuItem("Edit", 18);
+        deleteMenuItem = createMenuItem("Delete", 18);
 
         menu.add(addMenuItem);
         menu.add(editMenuItem);
         menu.add(deleteMenuItem);
-        menu.add(historyMenuItem);
-        menu.add(randomMenuItem);
-        menu.add(searchMenuItem);
-        menu.add(resetMenuItem);
-        submenu.add(findDefinitionMenuItem);
-        submenu.add(findSlangWordMenuItem);
-        menu.add(submenu);
         menuBar.add(menu);
 
-        slangWord = SlangWord.getInstance();
+        // JMenu 2: Extra Features
+        extraMenu = new JMenu("Extra Features");
+        extraMenu.setFont(new Font("Gill Sans MT", Font.PLAIN, 24));
+        extraMenu.setForeground(Color.BLACK);
 
-        exitButton = new JButton("Exit");
-        exitButton.addActionListener(this);
-        exitButton.setFont(new Font("Gill Sans MT", Font.PLAIN, 24));
-        exitButton.setFocusable(false);
-        exitButton.setForeground(Color.YELLOW);
-        exitButton.setBackground(Color.RED);
+        randomMenuItem = createMenuItem("Random", 18);
+        searchMenuItem = createMenuItem("Search", 18);
+        historyMenuItem = createMenuItem("History", 18);
+        resetMenuItem = createMenuItem("Reset", 18);
+
+        extraMenu.add(searchMenuItem);
+        extraMenu.add(randomMenuItem);
+        extraMenu.add(historyMenuItem);
+        extraMenu.add(resetMenuItem);
+        menuBar.add(extraMenu);
+
+        // JMenu 3: Game
+        gameMenu = new JMenu("Game");
+        gameMenu.setFont(new Font("Gill Sans MT", Font.PLAIN, 24));
+        gameMenu.setForeground(Color.BLACK);
+
+        findDefinitionMenuItem = createMenuItem("Definition", 18);
+        findSlangWordMenuItem = createMenuItem("SlangWord", 18);
+
+        gameMenu.add(findSlangWordMenuItem);
+        gameMenu.add(findDefinitionMenuItem);
+        menuBar.add(gameMenu);
+
+        slangWord = SlangWord.getInstance();
+        // JMenu 4: Exit
+
+        exitMenu = new JMenu("Exit");
+        exitMenu.setFont(new Font("Gill Sans MT", Font.PLAIN, 24));
+        exitMenu.setFocusable(false);
+        exitMenu.setForeground(Color.BLACK);
+
+        exitMenuItem = new JMenuItem("Exit");
+        exitMenuItem.setFont(new Font("Gill Sans MT", Font.PLAIN, 18));
+        exitMenuItem.addActionListener(this);
+        exitMenu.add(exitMenuItem);
+        menuBar.add(Box.createHorizontalGlue());
+        menuBar.add(exitMenu);
 
         JLabel resultLabel = new JLabel();
         resultLabel.setForeground(Color.BLACK);
@@ -83,7 +99,7 @@ public class MenuSWFrame extends JFrame implements ActionListener {
         String[][] dataCopy = slangWord.getData();
         String[] column = {"STT", "Slang Word", "Definition"};
         resultLabel.setText("Total: " + data.length + " slang words");
-        DefaultTableModel model = new DefaultTableModel(data, column);
+        model = new DefaultTableModel(data, column);
         slangWordTable = new JTable(model);
         slangWordTable.setRowHeight(30);
         DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
@@ -104,12 +120,7 @@ public class MenuSWFrame extends JFrame implements ActionListener {
         centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.X_AXIS));
 
         JPanel buttonPanel = new JPanel();
-        Dimension buttonSize = new Dimension(100, 50);
-        buttonPanel.setMaximumSize(buttonSize);
-        buttonPanel.setPreferredSize(buttonSize);
-        buttonPanel.setMinimumSize(buttonSize);
-        buttonPanel.setLayout(new GridLayout(1, 1));
-        buttonPanel.add(exitButton);
+
 
         Dimension panelSize = new Dimension(650, 530);
         centerPanel.setMaximumSize(panelSize);
@@ -191,8 +202,11 @@ public class MenuSWFrame extends JFrame implements ActionListener {
         } else if (e.getSource() == findSlangWordMenuItem) {
             dispose();
             new QuestionSWFrame(2);
-        } else if (e.getSource() == exitButton) {
-            System.exit(0);
-        }
+        } else if (e.getSource() == exitMenuItem) {
+            int choice = JOptionPane.showConfirmDialog(this, "Do you really want to exit?", "Confirm Exit",
+                    JOptionPane.YES_NO_OPTION);
+            if (choice == JOptionPane.YES_OPTION) {
+                System.exit(0);
+            }        }
     }
 }
