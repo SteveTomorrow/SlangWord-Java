@@ -1,6 +1,6 @@
 package feature;
 
-import read.SlangWord;
+import handle.SlangWord;
 import shows.MenuSWFrame;
 
 import java.awt.BorderLayout;
@@ -91,9 +91,6 @@ public class SearchSWFrame extends JFrame implements ActionListener, TableModelL
         tableshow.getColumnModel().getColumn(1).setPreferredWidth(200); // Adjust the width of the "Slang Word" column
         tableshow.getColumnModel().getColumn(2).setPreferredWidth(500); // Adjust the width of the "Definition" column
         tableshow.getModel().addTableModelListener(this);
-//        ListSelectionModel selectionModel = tableshow.getSelectionModel();
-//
-//        selectionModel.addListSelectionListener(this);
 
         JScrollPane sp = new JScrollPane(tableshow);
 
@@ -136,17 +133,15 @@ public class SearchSWFrame extends JFrame implements ActionListener, TableModelL
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        // TODO Auto-generated method stub
         if (e.getSource() == btnFind) {
             String key = textField.getText();
-            // System.out.println("a" + key + "a");
             if (key.isEmpty()) {
                 JOptionPane.showMessageDialog(this, "Please input slang word you want to find", "Inane error",
                         JOptionPane.ERROR_MESSAGE);
                 return;
             }
             Object[] options = { "Find Flow Slang Word", "Find Slang Flow definition" };
-            int n = JOptionPane.showOptionDialog(this, "Choose mode " + "you want to excute?", "Choose mode find",
+            int n = JOptionPane.showOptionDialog(this, "Choose mode " + "you want to execute?", "Choose mode find",
                     JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, null);
             String[][] temp = null;
             if (n == 0) {
@@ -159,7 +154,7 @@ public class SearchSWFrame extends JFrame implements ActionListener, TableModelL
                     titleLabel1.setText("Execution time in milliseconds: " + temp.length + " Slang Words/ "
                             + String.valueOf(timeElapsed) + " ms");
                 else {
-                    titleLabel1.setText("Can't not find that Slang Word");
+                    titleLabel1.setText("Can't find that Slang Word");
                     return;
                 }
                 result = temp;
@@ -175,10 +170,10 @@ public class SearchSWFrame extends JFrame implements ActionListener, TableModelL
                 long endTime = System.currentTimeMillis();
                 long timeElapsed = endTime - startTime;
                 if (temp != null)
-                    titleLabel1.setText("Execution time in millisecond: " + temp.length + " Slang Words/ "
+                    titleLabel1.setText("Execution time in milliseconds: " + temp.length + " Slang Words/ "
                             + String.valueOf(timeElapsed) + " ms");
                 else {
-                    titleLabel1.setText("Can't not find that Slang Word");
+                    titleLabel1.setText("Can't find that Slang Word");
                     return;
                 }
                 result = temp;
@@ -191,7 +186,6 @@ public class SearchSWFrame extends JFrame implements ActionListener, TableModelL
                 for (int ii = 0; ii < temp.length; ii++)
                     slangword.saveHistory(temp[ii][1], temp[ii][2]);
             } catch (Exception e1) {
-                // TODO Auto-generated catch block
                 e1.printStackTrace();
             }
         } else if (e.getSource() == btnBack) {
@@ -209,42 +203,23 @@ public class SearchSWFrame extends JFrame implements ActionListener, TableModelL
         String Data = (String) tableshow.getValueAt(row, col);
         System.out.println("Table element selected is: " + row + col + " : " + Data);
         if (col == 1 || col == 2) {
-            String oldSlang = result[row][1];  // Lấy giá trị Slang cũ từ biến result
-            String newSlang = (String) tableshow.getValueAt(row, 1); // Lấy giá trị Slang mới từ bảng
-            String oldValue = result[row][2];  // Lấy giá trị Definition cũ từ biến result
-            String newValue = (String) tableshow.getValueAt(row, 2); // Lấy giá trị Definition mới từ bảng
+            String oldSlang = result[row][1];
+            String newSlang = (String) tableshow.getValueAt(row, 1);
+            String oldValue = result[row][2];
+            String newValue = (String) tableshow.getValueAt(row, 2);
             result[row][1] = newSlang;
             result[row][2] = newValue;
-
             slangword.set(oldSlang, newSlang, oldValue, newValue);
             JOptionPane.showMessageDialog(this, "Updated a row.");
         }
         tableshow.setFocusable(false);
-        // TODO Auto-generated method stub
     }
+
     public void valueChanged(ListSelectionEvent e) {
-        // TODO Auto-generated method stub
-//        int row = tableshow.getSelectedRow();
-//        int col = tableshow.getSelectedColumn();
-//        if (row == -1 || col == -1)
-//            return;
-//        String Data = (String) tableshow.getValueAt(row, 1);
-//
-//        System.out.println("Table element selected is: " + Data);
-//        int n = JOptionPane.showConfirmDialog(this, "Would you like to delete this slang word?", "An Inane Question",
-//                JOptionPane.YES_NO_OPTION);
-//        if (n == 0) {
-//            slangword.delete(Data, (String) tableshow.getValueAt(row, 2));
-//            // default title and icon
-//            model.removeRow(row);
-//            JOptionPane.showMessageDialog(this, "Deleted success");
-//
-//        }
     }
 
     void clearTable() {
         int rowCount = model.getRowCount();
-        // Remove rows one by one from the end of the table
         for (int i = rowCount - 1; i >= 0; i--) {
             model.removeRow(i);
         }

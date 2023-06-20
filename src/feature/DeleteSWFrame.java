@@ -1,7 +1,7 @@
 package feature;
 
 
-import read.SlangWord;
+import handle.SlangWord;
 import shows.MenuSWFrame;
 
 import java.awt.BorderLayout;

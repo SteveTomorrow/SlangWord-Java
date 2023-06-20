@@ -18,7 +18,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-import read.SlangWord;
+import handle.SlangWord;
 import shows.MenuSWFrame;
 
 public class QuestionSWFrame extends JFrame implements ActionListener {

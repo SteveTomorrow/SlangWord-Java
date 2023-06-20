@@ -18,7 +18,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SpringLayout;
 
-import read.SlangWord;
+import handle.SlangWord;
 import shows.MenuSWFrame;
 
 public class AddSWFrame extends JFrame implements ActionListener {

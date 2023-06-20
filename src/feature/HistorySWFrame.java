@@ -19,7 +19,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 
-import read.SlangWord;
+import handle.SlangWord;
 import shows.MenuSWFrame;
 
 public class HistorySWFrame extends JFrame implements ActionListener {
